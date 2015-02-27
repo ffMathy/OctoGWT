@@ -27,14 +27,6 @@ namespace OctoGWT.Tests.Contexts
                     return chromeDriver;
                 });
 
-                constructors.Add(delegate
-                {
-                    var profile = new FirefoxProfile();
-
-                    var firefoxDriver = new FirefoxDriver(profile);
-                    return firefoxDriver;
-                });
-
                 return constructors;
             }
         }

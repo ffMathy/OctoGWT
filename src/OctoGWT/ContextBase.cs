@@ -95,7 +95,6 @@ namespace OctoGWT.Facades
         public virtual void Dispose()
         {
             Run();
-            Debug.Assert(pendingContexts.Count == 0);
         }
 
     }
