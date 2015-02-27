@@ -51,10 +51,10 @@ namespace OctoGWT.ContextChains
             return context;
         }
 
-        internal void Run()
+        internal void Run(ParallelWebDriverFacade browser)
         {
             //run all actions.
-            var facade = new GivenWebDriverFacade(Browser);
+            var facade = new GivenWebDriverFacade(browser);
             foreach(var action in actions)
             {
                 action(facade);

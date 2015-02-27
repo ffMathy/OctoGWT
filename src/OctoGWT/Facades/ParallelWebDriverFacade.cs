@@ -22,10 +22,9 @@ namespace OctoGWT.Facades
 
             //reposition windows so that you can see what is going on.
             var distanceFactor = 200;
-            var baseDistance = windowOffset++ * distanceFactor;
 
             var previousDriver = webDrivers.First();
-            foreach(var driver in webDrivers.Skip(1))
+            foreach(var driver in webDrivers)
             {
                 var manage = driver.Manage();
                 var window = manage.Window;
@@ -34,7 +33,8 @@ namespace OctoGWT.Facades
                 var previousWindow = previousManage.Window;
                 var previousPosition = previousWindow.Position;
 
-                window.Position = new Point(baseDistance + previousPosition.X + distanceFactor, baseDistance + previousPosition.Y + distanceFactor);
+                windowOffset += distanceFactor;
+                window.Position = new Point(windowOffset, windowOffset);
 
                 previousDriver = driver;
             }

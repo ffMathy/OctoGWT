@@ -24,11 +24,12 @@ namespace OctoGWT.Tests
                     })
                     .When(w =>
                     {
-                        w.ITypeInAnElement(By.XPath(googleSearchTextFieldXPath), "The \"Given-When-Then\" framework is cool!");
+                        w.ITypeInAnElement(By.XPath(googleSearchTextFieldXPath), "The \"GWT\" framework is cool!");
                         w.IClickOnAnElement(By.XPath("//button[@type='submit']"));
 
                         //wait for the search result list to appear.
                         w.IWaitForAnElementToAppear(By.CssSelector(".srg"));
+                        w.IWait(5000);
                     })
                     .Then(t =>
                     {
@@ -36,7 +37,7 @@ namespace OctoGWT.Tests
                         t.IShouldSeeMultipleElements(By.CssSelector(googleSearchResultListItemCssSelector));
 
                         //one of these items should contain the text GivenWhenThen.
-                        t.IShouldSeeAnElementContainingText(By.CssSelector(googleSearchResultListItemCssSelector), "Given-When-Then");
+                        t.IShouldSeeAnElementContainingText(By.CssSelector(googleSearchResultListItemCssSelector), "GWT");
                     });
 
                 context

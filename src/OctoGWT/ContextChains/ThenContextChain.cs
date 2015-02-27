@@ -37,10 +37,10 @@ namespace OctoGWT.ContextChains
             startContext.QueueContextForRunning(this);
         }
 
-        internal void Run()
+        internal void Run(ParallelWebDriverFacade browser)
         {
             //execute the then clause.
-            action(new ThenWebDriverFacade(Browser));
+            action(new ThenWebDriverFacade(browser));
 
             //increment run count.
             RunCount++;

@@ -15,11 +15,5 @@ namespace OctoGWT.ContextChains
         protected internal int RunCount { get; protected set; }
 
         internal abstract ContextBase StartContext { get; }
-
-        internal ParallelWebDriverFacade Browser { get
-            {
-                return StartContext.Browser;
-            }
-        }
     }
 }

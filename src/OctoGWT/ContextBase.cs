@@ -17,15 +17,6 @@ namespace OctoGWT.Facades
 
         private LinkedList<ThenContextChain> pendingContexts;
 
-        private ParallelWebDriverFacade browser;
-        internal ParallelWebDriverFacade Browser
-        {
-            get
-            {
-                return browser;
-            }
-        }
-
         protected abstract IEnumerable<Func<IWebDriver>> WebDriverConstructors { get; }
 
         protected ContextBase()
@@ -56,7 +47,7 @@ namespace OctoGWT.Facades
 
                 //construct all web drivers and append them to the wrapper class.
                 var webDrivers = WebDriverConstructors.Select((constructor) => new EventFiringWebDriver(constructor()));
-                using (browser = new ParallelWebDriverFacade(webDrivers))
+                using (var browser = new ParallelWebDriverFacade(webDrivers))
                 {
 
                     //get the rest of the contexts.
@@ -67,13 +58,13 @@ namespace OctoGWT.Facades
                     Debug.Assert(startContext == this);
 
                     //run the given part.
-                    givenContext.Run();
+                    givenContext.Run(browser);
 
                     //now that we have the given part, run the when part.
-                    whenContext.Run();
+                    whenContext.Run(browser);
 
                     //run the then context.
-                    thenContext.Run();
+                    thenContext.Run(browser);
 
                 }
 
