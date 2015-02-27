@@ -16,6 +16,7 @@ namespace OctoGWT.Tests
                 const string googleSearchTextFieldXPath = "//input[@name='q']";
                 const string googleSearchResultListItemCssSelector = ".g";
 
+                //start a GWT test by specifying it with predicates.
                 context
                     .Given(g =>
                     {
@@ -40,6 +41,7 @@ namespace OctoGWT.Tests
                         t.IShouldSeeAnElementContainingText(By.CssSelector(googleSearchResultListItemCssSelector), "GWT");
                     });
 
+                //start yet another GWT test, this time by specifying it with custom instructions.
                 context
                     .Given(new GivenIAmOnGooglesFrontPage())
                     .When(new WhenISearchOnGoogleFor("I can also use \"instructions\"!"))
