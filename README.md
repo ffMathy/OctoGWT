@@ -62,4 +62,4 @@ It's frustrating when your build server runs out of memory because after a few t
 OctoGWT takes care of all that. When a context is disposed (after leaving the ``using`` scope), it also closes the browser windows and all associated resources with it.
 
 ## No plugins needed
-You don't need any plugins to get OctoGWT working. It'll work directly with what you've already got (NUnit, MsTest, whatever).
+You don't need any plugins for Visual Studio to get OctoGWT working. It'll work directly with what you've already got.
