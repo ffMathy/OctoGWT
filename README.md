@@ -1,6 +1,6 @@
 # OctoGWT
 ## Given-When-Then test framework on steroids
-*powered by Selenium WebDriver*
+*Powered by Selenium WebDriver*
 
 For GWT there are many test frameworks to pick from. One of these is Cucumber, which is good for what it's for (increasing readability of tests for "normal" human beings). However, developing tests in this system can take a long time.
 
@@ -55,3 +55,9 @@ Running tests (especially WebDriver driven integration tests) can take a while. 
 Wouldn't it be great if you could somehow **run several GWTs at once**, on **several browsers at the same time**? With OctoGWT, all GWTs are run in several browsers (that you specify) at the same time. Furthermore, each GWT that is created within the same context is run in parallel.
 
 That's insanely effective if you think about it. Let's say you've created a setup with three test browsers. One for Chrome, one for Firefox, and one for Internet Explorer. Running the test from the code sample above (consisting of two GWTs defined in the same context) would then run in parallel, with each GWT **also** running on all three browsers. That's 6 browser instances running **at the same time** evaluating **two GWTs at once**.
+
+## Get rid of garbage
+It's frustrating when your build server runs out of memory because after a few thousand test runs, or even more frustrating when your PC is left with a lot of open webbrowsers after testing, because the test didn't clean up properly.
+
+OctoGWT takes care of all that. When a context is disposed (after leaving the ``using`` scope), it also closes the browser windows and all associated resources with it.
+
