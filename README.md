@@ -1,5 +1,7 @@
 # OctoGWT
-## A Selenium WebDriver Given-When-Then test framework on steroids
+## Given-When-Then test framework on steroids
+*powered by Selenium WebDriver*
+
 For GWT there are many test frameworks to pick from. One of these is Cucumber, which is good for what it's for (increasing readability of tests for "normal" human beings). However, developing tests in this system can take a long time.
 
 If you think the following sample code excites you, please do read on.
