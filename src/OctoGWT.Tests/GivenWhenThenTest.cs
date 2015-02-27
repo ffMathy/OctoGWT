@@ -13,19 +13,17 @@ namespace OctoGWT.Tests
         {
             using (var context = new MyTestContext())
             {
-                const string googleSearchTextFieldXPath = "//input[@name='q']";
-                const string googleSearchResultListItemCssSelector = ".g";
 
                 //start a GWT test by specifying it with predicates.
                 context
                     .Given(g =>
                     {
                         g.IAmOnPage("https://www.google.com");
-                        g.ICanSeeAnElement(By.XPath(googleSearchTextFieldXPath));
+                        g.ICanSeeAnElement(By.XPath("//input[@name='q']"));
                     })
                     .When(w =>
                     {
-                        w.ITypeInAnElement(By.XPath(googleSearchTextFieldXPath), "The \"GWT\" framework is cool!");
+                        w.ITypeInAnElement(By.XPath("//input[@name='q']"), "The \"GWT\" framework is cool!");
                         w.IClickOnAnElement(By.XPath("//button[@type='submit']"));
 
                         //wait for the search result list to appear.
@@ -35,10 +33,7 @@ namespace OctoGWT.Tests
                     .Then(t =>
                     {
                         //now we should see multiple result items.
-                        t.IShouldSeeMultipleElements(By.CssSelector(googleSearchResultListItemCssSelector));
-
-                        //one of these items should contain the text GivenWhenThen.
-                        t.IShouldSeeAnElementContainingText(By.CssSelector(googleSearchResultListItemCssSelector), "GWT");
+                        t.IShouldSeeMultipleElementsContainingText(By.CssSelector(".g"), "GWT");
                     });
 
                 //start yet another GWT test, this time by specifying it with custom instructions.

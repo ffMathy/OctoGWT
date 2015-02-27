@@ -74,6 +74,9 @@ namespace OctoGWT.Facades
                 if (!elements.Any())
                 {
                     throw new ThenException("Expected a single element, but received no elements with the selector [" + by + "].");
+                } else if(elements.Count() > 1)
+                {
+                    throw new ThenException("Expected a single element, but received multiple elements with the selector [" + by + "].");
                 }
 
                 var firstElement = elements.First();
