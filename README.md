@@ -1,10 +1,10 @@
 # OctoGWT
 ## Given-When-Then test framework on steroids
-*Powered by Selenium WebDriver*
+*Powered by Selenium WebDriver technology*
 
-For GWT there are many test frameworks to pick from. One of these is Cucumber, which is good for what it's for (increasing readability of tests for "normal" human beings). However, developing tests in this system can take a long time.
+For GWT there are many test frameworks to pick from. One of these is [Cucumber](http://cukes.info/) (implemented in the C# world as [SpecFlow](http://www.specflow.org/)), which is good for what it's for (increasing readability of tests for standard human beings). However, developing tests in this system can take quite some time.
 
-If you think the following sample code excites you, please do read on.
+If you think the following sample test excites you, please on below.
 
 ```csharp
 [TestMethod]
@@ -61,3 +61,5 @@ It's frustrating when your build server runs out of memory because after a few t
 
 OctoGWT takes care of all that. When a context is disposed (after leaving the ``using`` scope), it also closes the browser windows and all associated resources with it.
 
+## No plugins needed
+You don't need any plugins to get OctoGWT working. It'll work directly with what you've already got (NUnit, MsTest, whatever).
