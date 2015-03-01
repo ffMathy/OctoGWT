@@ -46,9 +46,17 @@ namespace OctoGWT.Facades
             {
 
                 //construct all web drivers and append them to the wrapper class.
-                var webDrivers = WebDriverConstructors.Select((constructor) => new EventFiringWebDriver(constructor()));
-                using (var browser = new ParallelWebDriverFacade(webDrivers))
+                var webDrivers = new List<EventFiringWebDriver>();
+
+                try
                 {
+                    foreach (var driverConstructor in WebDriverConstructors)
+                    {
+                        var webDriver = new EventFiringWebDriver(driverConstructor());
+                        webDrivers.Add(webDriver);
+                    }
+
+                    var browserFacade = new ParallelWebDriverFacade(webDrivers);
 
                     //get the rest of the contexts.
                     var whenContext = thenContext.WhenContext;
@@ -58,14 +66,30 @@ namespace OctoGWT.Facades
                     Debug.Assert(startContext == this);
 
                     //run the given part.
-                    givenContext.Run(browser);
+                    givenContext.Run(browserFacade);
 
                     //now that we have the given part, run the when part.
-                    whenContext.Run(browser);
+                    whenContext.Run(browserFacade);
 
                     //run the then context.
-                    thenContext.Run(browser);
+                    thenContext.Run(browserFacade);
 
+                }
+                finally
+                {
+                    foreach (var driver in webDrivers)
+                    {
+                        try
+                        {
+                            driver.Quit();
+                        }
+                        catch { }
+                        try
+                        {
+                            driver.Dispose();
+                        }
+                        catch { }
+                    }
                 }
 
             });

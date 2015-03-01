@@ -21,7 +21,7 @@ namespace OctoGWT.Tests.Instructions
         public void Run(WhenWebDriverFacade w)
         {
             //type in the term to the search field.
-            w.ITypeInAnElement(By.XPath("//input[@name='q']"), term);
+            w.ITypeInAnElement(By.XPath("//input[@name='q']"), term + Keys.Enter);
             w.IClickOnAnElement(By.XPath("//button[@type='submit']"));
 
             //wait for the search result list to appear.

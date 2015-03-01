@@ -23,12 +23,11 @@ namespace OctoGWT.Tests
                     })
                     .When(w =>
                     {
-                        w.ITypeInAnElement(By.XPath("//input[@name='q']"), "The \"GWT\" framework is cool!");
+                        w.ITypeInAnElement(By.XPath("//input[@name='q']"), "The \"GWT\" framework is cool!" + Keys.Enter);
                         w.IClickOnAnElement(By.XPath("//button[@type='submit']"));
 
                         //wait for the search result list to appear.
                         w.IWaitForAnElementToAppear(By.CssSelector(".srg"));
-                        w.IWait(5000);
                     })
                     .Then(t =>
                     {

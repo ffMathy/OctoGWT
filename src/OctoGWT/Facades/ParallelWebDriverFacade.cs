@@ -10,9 +10,9 @@ using System.Drawing;
 
 namespace OctoGWT.Facades
 {
-    internal sealed class ParallelWebDriverFacade : IDisposable
+    internal sealed class ParallelWebDriverFacade
     {
-        private static int windowOffset;
+        private static volatile int windowOffset;
 
         private EventFiringWebDriver[] webDrivers;
 
@@ -22,21 +22,14 @@ namespace OctoGWT.Facades
 
             //reposition windows so that you can see what is going on.
             var distanceFactor = 200;
-
-            var previousDriver = webDrivers.First();
+            
             foreach (var driver in webDrivers)
             {
                 var manage = driver.Manage();
                 var window = manage.Window;
 
-                var previousManage = previousDriver.Manage();
-                var previousWindow = previousManage.Window;
-                var previousPosition = previousWindow.Position;
-
                 window.Position = new Point(windowOffset, windowOffset);
                 windowOffset += distanceFactor;
-
-                previousDriver = driver;
             }
         }
 
@@ -99,28 +92,6 @@ namespace OctoGWT.Facades
                     Thread.Sleep(10);
                 }
             });
-        }
-
-        public void Dispose()
-        {
-            foreach (var driver in webDrivers)
-            {
-                try
-                {
-                    driver.Close();
-                }
-                catch { }
-                try
-                {
-                    driver.Quit();
-                }
-                catch { }
-                try
-                {
-                    driver.Dispose();
-                }
-                catch { }
-            }
         }
     }
 }
