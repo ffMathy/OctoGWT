@@ -10,6 +10,7 @@ Take a look at the following code sample, and let's see if it grabs your attenti
 [TestMethod]
 public void TestGoogleSearch()
 {
+    //all GWTs within the same context are run in parallel. furthermore, each GWT is run in all browsers in parallel as well!
     using (var context = new MyTestContext())
     {
 
