@@ -39,7 +39,7 @@ namespace OctoGWT.Tests
                 context
                     .Given(new GivenIAmOnGooglesFrontPage())
                     .When(new WhenISearchOnGoogleFor("I can also use \"instructions\"!"))
-                    .Then(new ThenIShouldSeeMyGoogleResultContaining("instructions"));
+                    .Then(new ThenIShouldSeeAGoogleResultContaining("instructions"));
                 
             }
         }

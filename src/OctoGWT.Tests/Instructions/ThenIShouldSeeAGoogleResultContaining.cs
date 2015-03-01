@@ -4,11 +4,11 @@ using OpenQA.Selenium;
 
 namespace OctoGWT.Tests.Instructions
 {
-    sealed class ThenIShouldSeeMyGoogleResultContaining : IThenInstruction
+    sealed class ThenIShouldSeeAGoogleResultContaining : IThenInstruction
     {
         private string term;
 
-        public ThenIShouldSeeMyGoogleResultContaining(string term)
+        public ThenIShouldSeeAGoogleResultContaining(string term)
         {
             this.term = term;
         }
