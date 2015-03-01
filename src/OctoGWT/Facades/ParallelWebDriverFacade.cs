@@ -24,7 +24,7 @@ namespace OctoGWT.Facades
             var distanceFactor = 200;
 
             var previousDriver = webDrivers.First();
-            foreach(var driver in webDrivers)
+            foreach (var driver in webDrivers)
             {
                 var manage = driver.Manage();
                 var window = manage.Window;
@@ -33,8 +33,8 @@ namespace OctoGWT.Facades
                 var previousWindow = previousManage.Window;
                 var previousPosition = previousWindow.Position;
 
-                windowOffset += distanceFactor;
                 window.Position = new Point(windowOffset, windowOffset);
+                windowOffset += distanceFactor;
 
                 previousDriver = driver;
             }
@@ -105,9 +105,21 @@ namespace OctoGWT.Facades
         {
             foreach (var driver in webDrivers)
             {
-                driver.Close();
-                driver.Quit();
-                driver.Dispose();
+                try
+                {
+                    driver.Close();
+                }
+                catch { }
+                try
+                {
+                    driver.Quit();
+                }
+                catch { }
+                try
+                {
+                    driver.Dispose();
+                }
+                catch { }
             }
         }
     }

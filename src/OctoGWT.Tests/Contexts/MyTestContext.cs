@@ -10,6 +10,8 @@ namespace OctoGWT.Tests.Contexts
     sealed class MyTestContext : ContextBase
     {
 
+        private static volatile int firefoxPortOffset;
+
         protected override IEnumerable<Func<IWebDriver>> WebDriverConstructors
         {
             get
