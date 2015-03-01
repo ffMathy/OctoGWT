@@ -2,9 +2,9 @@
 *Powered by Selenium WebDriver technology*
 
 ## Introduction
-For GWT there are many test frameworks to pick from. One of these is [Cucumber](http://cukes.info/) (implemented in the C# world as [SpecFlow](http://www.specflow.org/)), which is good for what it's for (increasing readability of tests for standard human beings). However, developing tests in this system can take quite some time.
+For GWT there are many test frameworks to pick from. One of these is [Cucumber](http://cukes.info/) (implemented in the C# world as [SpecFlow](http://www.specflow.org/)), which is good for what it's for (increasing readability of tests). However, developing tests in this system can take quite some time, and can be tiresome.
 
-If you think the following sample test excites you, please on below.
+Take a look at the following code sample, and let's see if it grabs your attention. If it does, we suggest you read the rest of this page.
 
 ```csharp
 [TestMethod]
