@@ -4,6 +4,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace OctoGWT.Tests.Contexts
 {
@@ -18,16 +19,21 @@ namespace OctoGWT.Tests.Contexts
             {
                 var constructors = new List<Func<IWebDriver>>();
 
-                constructors.Add(delegate
+                var chromePath = Path.Combine("Google", "Chrome", "Application", "chrome.exe");
+                var chromeInstalled = File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), chromePath)) || File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), chromePath));
+                if (chromeInstalled)
                 {
-                    var options = new ChromeOptions();
-                    options.LeaveBrowserRunning = false;
+                    constructors.Add(delegate
+                    {
+                        var options = new ChromeOptions();
+                        options.LeaveBrowserRunning = false;
 
-                    var service = ChromeDriverService.CreateDefaultService();
+                        var service = ChromeDriverService.CreateDefaultService();
 
-                    var chromeDriver = new ChromeDriver(service, options);
-                    return chromeDriver;
-                });
+                        var chromeDriver = new ChromeDriver(service, options);
+                        return chromeDriver;
+                    });
+                }
 
                 return constructors;
             }

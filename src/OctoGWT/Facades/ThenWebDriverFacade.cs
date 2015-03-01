@@ -74,15 +74,15 @@ namespace OctoGWT.Facades
                 if (!elements.Any())
                 {
                     throw new ThenException("Expected a single element, but received no elements with the selector [" + by + "].");
-                } else if(elements.Count() > 1)
-                {
-                    throw new ThenException("Expected a single element, but received multiple elements with the selector [" + by + "].");
                 }
 
-                var firstElement = elements.First();
-                if(!firstElement.Text.Contains(text))
+                var count = elements.Count(e => e.Text.Contains(text));
+                if (count == 0)
                 {
                     throw new ThenException("Expected a single element, but received no elements with the text [" + text + "].");
+                } else if(count > 1)
+                {
+                    throw new ThenException("Expected a single element, but received several elements with the text [" + text + "].");
                 }
             });
         }
@@ -94,9 +94,7 @@ namespace OctoGWT.Facades
                 if (!elements.Any())
                 {
                     throw new ThenException("Expected multiple elements, but received no elements with the selector [" + by + "].");
-                }
-
-                if (elements.Count() == 1)
+                } else if (elements.Count() == 1)
                 {
                     throw new ThenException("Expected multiple elements, but received a single element with the selector [" + by + "].");
                 }

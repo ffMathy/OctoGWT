@@ -15,13 +15,8 @@ namespace OctoGWT.Tests.Instructions
 
         public void Run(ThenWebDriverFacade t)
         {
-            const string googleSearchResultListItemCssSelector = ".g";
-
-            //now we should see multiple result items.
-            t.IShouldSeeMultipleElements(By.CssSelector(googleSearchResultListItemCssSelector));
-
             //one of these items should contain the term.
-            t.IShouldSeeAnElementContainingText(By.CssSelector(googleSearchResultListItemCssSelector), term);
+            t.IShouldSeeMultipleElementsContainingText(By.CssSelector(".g"), term);
         }
     }
 }
