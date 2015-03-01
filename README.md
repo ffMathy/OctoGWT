@@ -79,7 +79,7 @@ sealed class WhenISearchOnGoogleFor : IWhenInstruction
     public void Run(WhenWebDriverFacade w)
     {
         //type in the term to the search field.
-        w.ITypeInAnElement(By.XPath("//input[@name='q']"), term + Keys.Enter);
+        w.ITypeInAnElement(By.XPath("//input[@name='q']"), term);
         w.IClickOnAnElement(By.XPath("//button[@type='submit']"));
 
         //wait for the search result list to appear.
