@@ -50,7 +50,7 @@ The above example contains two GWTs that will run in parallel, basically doing a
 Each of them see if they can search for something on Google. They start by going to the front page (the **Given** clause), from where they type in some text in the search field (the **When** clause), and then finally assert (check) if a result is present in the result list (the **Then** clause).
 
 #### Re-using steps - instruction classes
-In the above example, in the second GWT that is added, instruction classes are used to re-use steps or chunks of tests. The ´GivenIAmOnGooglesFrontPage`, `WhenISearchOnGoogleFor` and `ThenIShouldSeeAGoogleResultContaining` classes simply just implement the `IGivenInstruction`, `IWhenInstruction` and `IThenInstruction` interfaces respectively, overriding a single method.
+In the above example, in the second GWT that is added, instruction classes are used to re-use steps or chunks of tests. The `GivenIAmOnGooglesFrontPage`, `WhenISearchOnGoogleFor` and `ThenIShouldSeeAGoogleResultContaining` classes simply just implement the `IGivenInstruction`, `IWhenInstruction` and `IThenInstruction` interfaces respectively, overriding a single method.
 
 You can see all of the classes below.
 
