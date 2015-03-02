@@ -7,8 +7,8 @@
     <ProjectGuid>{9D9ADA90-A926-4302-9E96-378AC72A68E6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GivenWhenThen</RootNamespace>
-    <AssemblyName>GivenWhenThen</AssemblyName>
+    <RootNamespace>OctoGWT</RootNamespace>
+    <AssemblyName>OctoGWT</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
