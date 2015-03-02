@@ -2,14 +2,15 @@
 *Powered by Selenium WebDriver technology*
 
 ## Introduction
-For GWT there are many test frameworks to pick from. One of these is [Cucumber](http://cukes.info/) (implemented in the C# world as [SpecFlow](http://www.specflow.org/)), which is good for what it's for (increasing readability of tests for standard human beings). However, developing tests in this system can take quite some time.
+For GWT there are many test frameworks to pick from. One of these is [Cucumber](http://cukes.info/) (implemented in the C# world as [SpecFlow](http://www.specflow.org/)), which is good for what it's for (increasing readability of tests). However, developing tests in this system can take quite some time, and can be tiresome.
 
-If you think the following sample test excites you, please on below.
+Take a look at the following code sample, and let's see if it grabs your attention. If it does, I suggest you read the rest of this page.
 
 ```csharp
 [TestMethod]
 public void TestGoogleSearch()
 {
+    //all GWTs within the same context are run in parallel. furthermore, each GWT is run in all browsers in parallel as well!
     using (var context = new MyTestContext())
     {
 
@@ -50,7 +51,7 @@ The above example contains two GWTs that will run in parallel, basically doing a
 Each of them see if they can search for something on Google. They start by going to the front page (the **Given** clause), from where they type in some text in the search field (the **When** clause), and then finally assert (check) if a result is present in the result list (the **Then** clause).
 
 #### Re-using steps - instruction classes
-In the above example, in the second GWT that is added, instruction classes are used to re-use steps or chunks of tests. The ´GivenIAmOnGooglesFrontPage`, `WhenISearchOnGoogleFor` and `ThenIShouldSeeAGoogleResultContaining` classes simply just implement the `IGivenInstruction`, `IWhenInstruction` and `IThenInstruction` interfaces respectively, overriding a single method.
+In the above example, in the second GWT that is added, instruction classes are used to re-use steps or chunks of tests. The `GivenIAmOnGooglesFrontPage`, `WhenISearchOnGoogleFor` and `ThenIShouldSeeAGoogleResultContaining` classes simply just implement the `IGivenInstruction`, `IWhenInstruction` and `IThenInstruction` interfaces respectively, overriding a single method.
 
 You can see all of the classes below.
 
@@ -78,7 +79,7 @@ sealed class WhenISearchOnGoogleFor : IWhenInstruction
     public void Run(WhenWebDriverFacade w)
     {
         //type in the term to the search field.
-        w.ITypeInAnElement(By.XPath("//input[@name='q']"), term + Keys.Enter);
+        w.ITypeInAnElement(By.XPath("//input[@name='q']"), term);
         w.IClickOnAnElement(By.XPath("//button[@type='submit']"));
 
         //wait for the search result list to appear.
@@ -200,7 +201,7 @@ Wouldn't it be great if you could somehow **run several GWTs at once**, on **sev
 That's insanely effective if you think about it. Let's say you've created a setup with three test browsers. One for Chrome, one for Firefox, and one for Internet Explorer. Running the test from the code sample above (consisting of two GWTs defined in the same context) would then run in parallel, with each GWT **also** running on all three browsers. That's 6 browser instances running **at the same time** evaluating **two GWTs at once**.
 
 ### Get rid of garbage
-It's frustrating when your build server runs out of memory because after a few thousand test runs, or even more frustrating when your PC is left with a lot of open webbrowsers after testing, because the test didn't clean up properly.
+It's frustrating when your build server runs out of memory after a few thousand test runs, or even more frustrating when your PC is left with a lot of open webbrowsers after testing, because the test didn't clean up properly.
 
 OctoGWT takes care of all that. When a context is disposed (after leaving the ``using`` scope), it also closes the browser windows and all associated resources with it.
 
