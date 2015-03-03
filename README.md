@@ -1,6 +1,10 @@
 # OctoGWT
 *Powered by Selenium WebDriver technology*
 
+Framework install: ```install-package OctoGWT```
+
+Sample test install: ```install-package OctoGWT.Tests```
+
 ## Introduction
 For GWT there are many test frameworks to pick from. One of these is [Cucumber](http://cukes.info/) (implemented in the C# world as [SpecFlow](http://www.specflow.org/)), which is good for what it's for (increasing readability of tests). However, developing tests in this system can take quite some time, and can be tiresome.
 
