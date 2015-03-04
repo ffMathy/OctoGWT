@@ -32,7 +32,6 @@ public void TestGoogleSearch()
 
                 //wait for the search result list to appear.
                 w.IWaitForAnElementToAppear(By.CssSelector(".srg"));
-                w.IWait(5000);
             })
             .Then(t =>
             {
