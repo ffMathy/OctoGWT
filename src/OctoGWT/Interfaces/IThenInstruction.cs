@@ -2,8 +2,7 @@
 
 namespace OctoGWT.Interfaces
 {
-    public interface IThenInstruction
+    public interface IThenInstruction : IInstruction<ThenWebDriverFacade>
     {
-        void Run(ThenWebDriverFacade t);
     }
 }

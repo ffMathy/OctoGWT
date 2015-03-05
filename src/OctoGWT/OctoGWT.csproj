@@ -53,17 +53,20 @@
     <Compile Include="Exceptions\GivenException.cs" />
     <Compile Include="Exceptions\ThenException.cs" />
     <Compile Include="Exceptions\WhenException.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Facades\ThenWebDriverFacade.cs" />
     <Compile Include="Facades\WhenWebDriverFacade.cs" />
     <Compile Include="Facades\GivenWebDriverFacade.cs" />
     <Compile Include="ContextChains\GivenContextChain.cs" />
-    <Compile Include="Interfaces\IThenInstruction.cs" />
     <Compile Include="Interfaces\IWhenInstruction.cs" />
+    <Compile Include="Interfaces\IThenInstruction.cs" />
     <Compile Include="Interfaces\IGivenInstruction.cs" />
+    <Compile Include="Interfaces\IInstruction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ContextChains\ThenContextChain.cs" />
     <Compile Include="Facades\ParallelWebDriverFacade.cs" />
     <Compile Include="ContextChains\WhenContextChain.cs" />
+    <Compile Include="Reports\ParallelWebDriverStepReport.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

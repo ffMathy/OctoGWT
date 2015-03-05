@@ -1,49 +1,36 @@
 ﻿using OctoGWT.Facades;
+using OctoGWT.Interfaces;
 using System;
 
 namespace OctoGWT.ContextChains
 {
-    public sealed class ThenContextChain : ContextChainBase
+    public sealed class ThenContextChain : ContextChainBase<WhenContextChain, IThenInstruction, ThenWebDriverFacade>
     {
-        private WhenContextChain whenContext;
-        internal WhenContextChain WhenContext
+        /// <summary>
+        /// Adds the current Given When Then chain to the run queue.
+        /// </summary>
+        private void AddGivenWhenThen()
         {
-            get
-            {
-                return whenContext;
-            }
-        }
+            var whenContext = this.ParentChain;
+            var givenContext = whenContext.ParentChain;
+            var startContext = givenContext.ParentChain;
 
-        internal override ContextBase StartContext
-        {
-            get
-            {
-                return whenContext.GivenContext.StartContext;
-            }
-        }
-
-        private Action<ThenWebDriverFacade> action;
-
-        internal ThenContextChain(WhenContextChain whenContext, Action<ThenWebDriverFacade> action)
-        {
-            this.action = action;
-            this.whenContext = whenContext;
-
-            //find all the contexts.
-            var givenContext = whenContext.GivenContext;
-            var startContext = givenContext.StartContext;
-
-            //append this context to be run by the start context.
             startContext.QueueContextForRunning(this);
         }
 
-        internal void Run(ParallelWebDriverFacade browser)
+        internal ThenContextChain(WhenContextChain parentChain, params IThenInstruction[] instructions) : base(parentChain, instructions)
         {
-            //execute the then clause.
-            action(new ThenWebDriverFacade(browser));
+            AddGivenWhenThen();
+        }
 
-            //increment run count.
-            RunCount++;
+        internal ThenContextChain(WhenContextChain parentChain, params Action<ThenWebDriverFacade>[] actions) : base(parentChain, actions)
+        {
+            AddGivenWhenThen();
+        }
+
+        internal override ThenWebDriverFacade ConstructNewFacade(ParallelWebDriverFacade browser)
+        {
+            return new ThenWebDriverFacade(browser);
         }
     }
 }

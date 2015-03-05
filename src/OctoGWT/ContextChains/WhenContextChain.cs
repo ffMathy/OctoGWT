@@ -8,67 +8,31 @@ using System.Threading.Tasks;
 
 namespace OctoGWT.ContextChains
 {
-    public sealed class WhenContextChain : ContextChainBase
+    public sealed class WhenContextChain : ContextChainBase<GivenContextChain, IWhenInstruction, WhenWebDriverFacade>
     {
-        private GivenContextChain givenContext;
-        internal GivenContextChain GivenContext
+        internal WhenContextChain(GivenContextChain parentChain, params IWhenInstruction[] instructions) : base(parentChain, instructions)
         {
-            get
-            {
-                return givenContext;
-            }
         }
 
-        internal override ContextBase StartContext
+        internal WhenContextChain(GivenContextChain parentChain, params Action<WhenWebDriverFacade>[] actions) : base(parentChain, actions)
         {
-            get
-            {
-                return givenContext.StartContext;
-            }
         }
 
-        private Action<WhenWebDriverFacade>[] conditions;
-
-        private WhenContextChain(GivenContextChain givenContext)
+        public ThenContextChain Then(params Action<ThenWebDriverFacade>[] actions)
         {
-            this.givenContext = givenContext;
-        }
-
-        internal WhenContextChain(GivenContextChain givenContext, params Action<WhenWebDriverFacade>[] conditions) : this(givenContext)
-        {
-            this.conditions = conditions;
-        }
-
-        internal WhenContextChain(GivenContextChain givenContext, params IWhenInstruction[] instructions) : this(givenContext)
-        {
-            this.conditions = instructions
-                .Select<IWhenInstruction, Action<WhenWebDriverFacade>>(i => g => i.Run(g))
-                .ToArray();
-        }
-
-        public ThenContextChain Then(Action<ThenWebDriverFacade> action)
-        {
-            var context = new ThenContextChain(this, action);
+            var context = new ThenContextChain(this, actions);
             return context;
         }
 
-        public ThenContextChain Then(IThenInstruction instruction)
+        public ThenContextChain Then(params IThenInstruction[] instructions)
         {
-            var context = new ThenContextChain(this, d => instruction.Run(d));
+            var context = new ThenContextChain(this, instructions);
             return context;
         }
 
-        internal void Run(ParallelWebDriverFacade browser)
+        internal override WhenWebDriverFacade ConstructNewFacade(ParallelWebDriverFacade browser)
         {
-            //run all conditions and check if they all meet.
-            var facade = new WhenWebDriverFacade(browser);
-            foreach(var condition in conditions)
-            {
-                condition(facade);
-            }
-
-            //increment the run count.
-            RunCount++;
+            return new WhenWebDriverFacade(browser);
         }
     }
 }

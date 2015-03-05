@@ -1,14 +1,8 @@
 ﻿using OctoGWT.Facades;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OctoGWT.Interfaces
 {
-    public interface IWhenInstruction
+    public interface IWhenInstruction : IInstruction<WhenWebDriverFacade>
     {
-        void Run(WhenWebDriverFacade w);
     }
 }

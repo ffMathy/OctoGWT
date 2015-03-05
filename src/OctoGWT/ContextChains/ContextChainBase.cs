@@ -1,4 +1,6 @@
 ﻿using OctoGWT.Facades;
+using OctoGWT.Interfaces;
+using OctoGWT.Reports;
 using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
@@ -8,12 +10,47 @@ using System.Threading.Tasks;
 
 namespace OctoGWT.ContextChains
 {
-    public abstract class ContextChainBase
+    public abstract class ContextChainBase<TParentChain, TInstruction, TDriverFacade> 
+        where TInstruction : IInstruction<TDriverFacade> 
+        where TDriverFacade : class
     {
-        protected ContextChainBase() { }
+        private IEnumerable<Action<TDriverFacade>> actions;
 
-        protected internal int RunCount { get; protected set; }
+        private TParentChain parentChain;
 
-        internal abstract ContextBase StartContext { get; }
+        internal TParentChain ParentChain
+        {
+            get
+            {
+                return parentChain;
+            }
+        }
+
+        private ContextChainBase(TParentChain parentChain)
+        {
+            this.parentChain = parentChain;
+        }
+
+        internal ContextChainBase(TParentChain parentChain, params Action<TDriverFacade>[] actions) : this(parentChain) {
+            this.actions = actions;
+        }
+
+        internal ContextChainBase(TParentChain parentChain, params TInstruction[] instructions) : this(parentChain)
+        {
+            this.actions = instructions
+                .Select<TInstruction, Action<TDriverFacade>>(i => g => i.Run(g));
+        }
+
+        internal abstract TDriverFacade ConstructNewFacade(ParallelWebDriverFacade browser);
+
+        internal void Run(ParallelWebDriverFacade browser)
+        {
+            var facade = ConstructNewFacade(browser);
+            foreach (var action in actions)
+            {
+                action(facade);
+            }
+        }
+
     }
 }

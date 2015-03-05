@@ -60,24 +60,6 @@ namespace OctoGWT.Tests.Contexts
                     });
                 }
 
-                //add opera if installed.
-                var operaPath = Path.Combine(programFilesPath, "Opera", "launcher.exe");
-                var isOperaInstalled = File.Exists(operaPath);
-                if (isOperaInstalled)
-                {
-                    constructors.Add(delegate
-                    {
-                        var options = new OperaOptions();
-                        options.BinaryLocation = operaPath;
-                        options.LeaveBrowserRunning = false;
-
-                        var service = OperaDriverService.CreateDefaultService();
-
-                        var driver = new OperaDriver(service, options);
-                        return driver;
-                    });
-                }
-
                 return constructors;
             }
         }

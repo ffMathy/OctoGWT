@@ -7,41 +7,19 @@ using System.Threading.Tasks;
 namespace OctoGWT.ContextChains
 {
 
-    public sealed class GivenContextChain : ContextChainBase
+    public sealed class GivenContextChain : ContextChainBase<ContextBase, IGivenInstruction, GivenWebDriverFacade>
     {
-
-        private ContextBase innerContext;
-
-        internal override ContextBase StartContext
+        internal GivenContextChain(ContextBase parentChain, params IGivenInstruction[] instructions) : base(parentChain, instructions)
         {
-            get
-            {
-                return innerContext;
-            }
         }
 
-        private Action<GivenWebDriverFacade>[] actions;
-
-        private GivenContextChain(ContextBase innerContext)
+        internal GivenContextChain(ContextBase parentChain, params Action<GivenWebDriverFacade>[] actions) : base(parentChain, actions)
         {
-            this.innerContext = innerContext;
         }
 
-        internal GivenContextChain(ContextBase innerContext, params Action<GivenWebDriverFacade>[] actions) : this(innerContext)
+        public WhenContextChain When(params Action<WhenWebDriverFacade>[] actions)
         {
-            this.actions = actions;
-        }
-
-        internal GivenContextChain(ContextBase innerContext, params IGivenInstruction[] instructions) : this(innerContext)
-        {
-            this.actions = instructions
-                .Select<IGivenInstruction, Action<GivenWebDriverFacade>>(i => g => i.Run(g))
-                .ToArray();
-        }
-
-        public WhenContextChain When(params Action<WhenWebDriverFacade>[] conditions)
-        {
-            var context = new WhenContextChain(this, conditions);
+            var context = new WhenContextChain(this, actions);
             return context;
         }
 
@@ -51,17 +29,9 @@ namespace OctoGWT.ContextChains
             return context;
         }
 
-        internal void Run(ParallelWebDriverFacade browser)
+        internal override GivenWebDriverFacade ConstructNewFacade(ParallelWebDriverFacade browser)
         {
-            //run all actions.
-            var facade = new GivenWebDriverFacade(browser);
-            foreach(var action in actions)
-            {
-                action(facade);
-            }
-
-            //increment run count.
-            RunCount++;
+            return new GivenWebDriverFacade(browser);
         }
     }
 }

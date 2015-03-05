@@ -1,12 +1,15 @@
 ﻿using OpenQA.Selenium;
 using System.Collections.Generic;
 using System;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using OpenQA.Selenium.Support.Events;
 using System.Threading;
 using System.Linq;
 using System.Drawing;
+using System.Diagnostics;
+using System.Reflection;
+using OctoGWT.Reports;
+using OctoGWT.Extensions;
 
 namespace OctoGWT.Facades
 {
@@ -14,15 +17,29 @@ namespace OctoGWT.Facades
     {
         private static volatile int windowOffset;
 
-        private EventFiringWebDriver[] webDrivers;
+        private int globalStepOffset;
+
+        private IEnumerable<EventFiringWebDriver> webDrivers;
+        private ICollection<WebDriverStepReport> stepReports;
+
+        public IEnumerable<WebDriverStepReport> StepReports
+        {
+            get
+            {
+                return stepReports;
+            }
+        }
+
+        public ParallelWebDriverFacade(params EventFiringWebDriver[] webDriversInput) : this((IEnumerable<EventFiringWebDriver>)webDriversInput) { }
 
         public ParallelWebDriverFacade(IEnumerable<EventFiringWebDriver> webDriversInput)
         {
-            this.webDrivers = webDriversInput.ToArray();
+            this.stepReports = new List<WebDriverStepReport>();
+            this.webDrivers = webDriversInput;
 
             //reposition windows so that you can see what is going on.
-            var distanceFactor = 200;
-            
+            var distanceFactor = 50;
+
             foreach (var driver in webDrivers)
             {
                 var manage = driver.Manage();
@@ -35,7 +52,85 @@ namespace OctoGWT.Facades
 
         private void ExecuteOnEachDriver(Action<EventFiringWebDriver> action)
         {
-            Parallel.ForEach(webDrivers, action);
+            //get the step offset.
+            var stepOffset = Interlocked.Increment(ref globalStepOffset);
+
+            //first infer some information about the method invoked.
+            var currentType = this.GetType();
+
+            var stack = new StackTrace();
+            var frames = stack.GetFrames();
+
+            var traceMethod = (MethodBase)null;
+            var traceType = (Type)null;
+            foreach (var frame in frames)
+            {
+                var method = frame.GetMethod();
+                var type = method.DeclaringType;
+
+                if (type != currentType)
+                {
+                    traceMethod = method;
+                    traceType = type;
+                    break;
+                }
+            }
+
+            //now we can fetch the name of the method that invoked this method.
+            var methodName = traceMethod.Name;
+
+            //and we can infer the clause that we are running in by looking at the name of the class.
+            var typeName = traceType.Name;
+
+            var typeNameWords = typeName.ExtractWords();
+            var clauseName = typeNameWords.First();
+
+            //run the task on all drivers, and save a screenshot at the end.
+            Parallel.ForEach(webDrivers, (driver) =>
+            {
+                //get the name of the browser.
+                var innerDriver = driver.WrappedDriver;
+                var driverType = innerDriver.GetType();
+
+                var driverName = driverType.Name;
+
+                //be ready to catch an exception if one occurs.
+                var exception = (Exception)null;
+                try
+                {
+
+                    //run the action on the driver.
+                    action(driver);
+
+                }
+                catch (Exception ex)
+                {
+                    exception = ex;
+                }
+                finally
+                {
+                    //take a screenshot if it's supported.
+                    var screenshot = (Screenshot)null;
+
+                    var screenshotDriver = driver as ITakesScreenshot;
+                    if (screenshotDriver != null)
+                    {
+                        screenshot = screenshotDriver.GetScreenshot();
+                    }
+
+                    //generate a step report and add it.
+                    var report = new WebDriverStepReport(stepOffset, clauseName, methodName, driverName, screenshot, exception);
+                    lock (stepReports)
+                    {
+                        stepReports.Add(report);
+                    }
+                    
+                    if(exception != null)
+                    {
+                        throw exception;
+                    }
+                }
+            });
         }
 
         internal void WaitForElements(By by, Action<IEnumerable<IWebElement>> callback)
@@ -66,7 +161,6 @@ namespace OctoGWT.Facades
         {
             ExecuteOnEachDriver((driver) =>
             {
-
                 var navigate = driver.Navigate();
                 var currentUrl = driver.Url;
 
