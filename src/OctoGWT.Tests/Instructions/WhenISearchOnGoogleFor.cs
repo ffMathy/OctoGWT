@@ -26,7 +26,6 @@ namespace OctoGWT.Tests.Instructions
 
             //wait for the search result list to appear.
             w.IWaitForAnElementToAppear(By.CssSelector(".srg"));
-            w.IWait(5000);
         }
     }
 }
