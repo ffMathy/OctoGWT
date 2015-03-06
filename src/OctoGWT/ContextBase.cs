@@ -66,9 +66,9 @@ namespace OctoGWT.Facades
             }
 
             //first do some cleaning up if possible - we don't need earlier reports.
-            if(Directory.Exists(testName))
+            if(Directory.Exists("Reports"))
             {
-                Directory.Delete(testName, true);
+                Directory.Delete("Reports", true);
             }
 
             //keep track of the order that tests ran in.
@@ -146,7 +146,7 @@ namespace OctoGWT.Facades
                     {
                         var report = reports[i];
 
-                        var basePath = Path.Combine(testName, testNumber + "", report.ClauseName);
+                        var basePath = Path.Combine("Reports", testName, testNumber + "", report.ClauseName);
 
                         //prepare a folder structure for this kind of report.
                         Directory.CreateDirectory(basePath);
