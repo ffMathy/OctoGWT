@@ -146,7 +146,8 @@ namespace OctoGWT.Facades
                     {
                         var report = reports[i];
 
-                        var basePath = Path.Combine("Reports", testName, testNumber + "", report.ClauseName);
+                        //generate a path name that tells something about the order, and the order.
+                        var basePath = Path.Combine("Reports", testName, testNumber + "", report.CategoryName);
 
                         //prepare a folder structure for this kind of report.
                         Directory.CreateDirectory(basePath);

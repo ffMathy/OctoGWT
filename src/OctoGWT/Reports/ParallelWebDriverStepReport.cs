@@ -9,7 +9,7 @@ namespace OctoGWT.Reports
 {
     internal class WebDriverStepReport
     {
-        private string clauseName;
+        private string categoryName;
         private string driverName;
         private string methodName;
 
@@ -39,11 +39,11 @@ namespace OctoGWT.Reports
             }
         }
 
-        public string ClauseName
+        public string CategoryName
         {
             get
             {
-                return clauseName;
+                return categoryName;
             }
         }
 
@@ -74,10 +74,10 @@ namespace OctoGWT.Reports
             }
         }
 
-        public WebDriverStepReport(int offset, string clauseName, string methodName, string driverName, Screenshot screenshot, Exception exception)
+        public WebDriverStepReport(int offset, string categoryName, string methodName, string driverName, Screenshot screenshot, Exception exception)
         {
             this.offset = offset;
-            this.clauseName = clauseName;
+            this.categoryName = categoryName;
             this.methodName = methodName;
             this.driverName = driverName;
             this.screenshot = screenshot;

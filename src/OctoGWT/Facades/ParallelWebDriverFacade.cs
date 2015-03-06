@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Reflection;
 using OctoGWT.Reports;
 using OctoGWT.Extensions;
+using OctoGWT.Interfaces;
 
 namespace OctoGWT.Facades
 {
@@ -85,6 +86,40 @@ namespace OctoGWT.Facades
             var typeNameWords = typeName.ExtractWords();
             var clauseName = typeNameWords.First();
 
+            //get the clause order. first given, then when, then then.
+            var clauseOrder = GetClauseOrder(clauseName);
+
+            //insert the order into the category.
+            var category = string.Format("{0}.{1}", clauseOrder, clauseName);
+
+            //let's see if this was all part of an instruction set. if it was, we can infer its name and append it to the clause name.
+            var instructionSetFound = false;
+            for (var i = 0; i < frames.Length && !instructionSetFound; i++)
+            {
+                var frame = frames[i];
+
+                //get the method of the frame.
+                var method = frame.GetMethod();
+                var type = method.DeclaringType;
+                var implementedTypes = type.GetInterfaces();
+
+                for (var o = 0; o < implementedTypes.Length && !instructionSetFound; o++)
+                {
+                    var implementedType = implementedTypes[o];
+                    if (implementedType.IsGenericType)
+                    {
+                        var genericTypeDefinition = implementedType.GetGenericTypeDefinition();
+                        if (genericTypeDefinition == typeof(IInstruction<>))
+                        {
+                            var instructionName = type.Name;
+                            category += string.Format(".{0}", instructionName);
+
+                            instructionSetFound = true;
+                        }
+                    }
+                }
+            }
+
             //run the task on all drivers, and save a screenshot at the end.
             Parallel.ForEach(webDrivers, (driver) =>
             {
@@ -119,18 +154,36 @@ namespace OctoGWT.Facades
                     }
 
                     //generate a step report and add it.
-                    var report = new WebDriverStepReport(stepOffset, clauseName, methodName, driverName, screenshot, exception);
+                    var report = new WebDriverStepReport(stepOffset, category, methodName, driverName, screenshot, exception);
                     lock (stepReports)
                     {
                         stepReports.Add(report);
                     }
-                    
-                    if(exception != null)
+
+                    if (exception != null)
                     {
                         throw exception;
                     }
                 }
             });
+        }
+
+        private int GetClauseOrder(string clauseName)
+        {
+            switch(clauseName)
+            {
+                case "Given":
+                    return 1;
+
+                case "When":
+                    return 2;
+
+                case "Then":
+                    return 3;
+
+                default:
+                    throw new ArgumentException("You have to provide a valid clause name.", "clauseName");
+            }
         }
 
         internal void WaitForElements(By by, Action<IEnumerable<IWebElement>> callback)
