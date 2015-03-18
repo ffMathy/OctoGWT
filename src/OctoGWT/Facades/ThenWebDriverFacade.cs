@@ -7,6 +7,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
+using OctoGWT.Interfaces;
+
 namespace OctoGWT.Facades
 {
     public sealed class ThenWebDriverFacade
@@ -16,6 +18,11 @@ namespace OctoGWT.Facades
         internal ThenWebDriverFacade(ParallelWebDriverFacade driver)
         {
             this.driver = driver;
+        }
+
+        public void Include(IThenInstruction instruction)
+        {
+            instruction.Run(this);
         }
 
         public void IShouldSeeAnElement(By by)

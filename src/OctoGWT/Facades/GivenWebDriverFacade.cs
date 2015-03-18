@@ -3,15 +3,22 @@ using OpenQA.Selenium;
 using System;
 using System.Linq;
 
+using OctoGWT.Interfaces;
+
 namespace OctoGWT.Facades
 {
     public sealed class GivenWebDriverFacade
     {
-        private ParallelWebDriverFacade driver;
+        private readonly ParallelWebDriverFacade driver;
 
         internal GivenWebDriverFacade(ParallelWebDriverFacade driver)
         {
             this.driver = driver;
+        }
+
+        public void Include(IGivenInstruction instruction)
+        {
+            instruction.Run(this);
         }
 
         public void IAmOnPage(string url)

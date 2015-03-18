@@ -4,15 +4,22 @@ using System;
 using System.Linq;
 using System.Threading;
 
+using OctoGWT.Interfaces;
+
 namespace OctoGWT.Facades
 {
     public sealed class WhenWebDriverFacade
     {
-        private ParallelWebDriverFacade driver;
+        private readonly ParallelWebDriverFacade driver;
 
         internal WhenWebDriverFacade(ParallelWebDriverFacade driver)
         {
             this.driver = driver;
+        }
+
+        public void Include(IWhenInstruction instruction)
+        {
+            instruction.Run(this);
         }
 
         public void IClickOnAnElement(By by)
