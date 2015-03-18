@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenQA.Selenium;
+using System.Drawing;
 
 namespace OctoGWT.Reports
 {
@@ -16,7 +12,7 @@ namespace OctoGWT.Reports
         private int offset;
 
         private Exception exception;
-        private Screenshot screenshot;
+        private Bitmap screenshot;
 
         public bool HasFailed
         {
@@ -31,7 +27,7 @@ namespace OctoGWT.Reports
             }
         }
 
-        public Screenshot Screenshot
+        public Bitmap Screenshot
         {
             get
             {
@@ -74,7 +70,7 @@ namespace OctoGWT.Reports
             }
         }
 
-        public WebDriverStepReport(int offset, string categoryName, string methodName, string driverName, Screenshot screenshot, Exception exception)
+        public WebDriverStepReport(int offset, string categoryName, string methodName, string driverName, Bitmap screenshot, Exception exception)
         {
             this.offset = offset;
             this.categoryName = categoryName;

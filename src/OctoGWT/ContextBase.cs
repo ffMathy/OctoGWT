@@ -1,10 +1,13 @@
 ﻿using OctoGWT.ContextChains;
+using OctoGWT.Extensions;
 using OctoGWT.Interfaces;
+using OctoGWT.Reports;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.Events;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
@@ -66,7 +69,7 @@ namespace OctoGWT.Facades
             }
 
             //first do some cleaning up if possible - we don't need earlier reports.
-            if(Directory.Exists("Reports"))
+            if (Directory.Exists("Reports"))
             {
                 Directory.Delete("Reports", true);
             }
@@ -142,22 +145,33 @@ namespace OctoGWT.Facades
 
                     //now let's store the reports we have.
                     var reports = browserFacade.StepReports.ToArray();
+
+                    //first figure out how big the image needs to be.
+                    var columns = new List<List<WebDriverStepReport>>();
+
+                    var offsetGroups = reports.GroupBy(r => r.Offset);
+
                     for (var i = 0; i < reports.Length; i++)
                     {
                         var report = reports[i];
 
-                        //generate a path name that tells something about the order, and the order.
-                        var basePath = Path.Combine("Reports", testName, testNumber + "", report.CategoryName);
-
-                        //prepare a folder structure for this kind of report.
-                        Directory.CreateDirectory(basePath);
-
-                        //now save the screenshot.
-                        var fileName = string.Format("{0}.{1}.{2}.{3}.png", report.Offset, report.HasFailed ? "Failed" : "Succeeded", report.MethodName, report.DriverName);
-                        var screenshotPath = Path.Combine(basePath, fileName);
-
                         var screenshot = report.Screenshot;
-                        screenshot.SaveAsFile(Path.Combine(basePath, fileName), ImageFormat.Png);
+                        if (screenshot != null)
+                        {
+
+                            //generate a path name that tells something about the order, and the order.
+                            var basePath = Path.Combine("Reports", testName, testNumber + "", report.CategoryName);
+
+                            //prepare a folder structure for this kind of report.
+                            Directory.CreateDirectory(basePath);
+
+                            //now save the screenshot.
+                            var fileName = string.Format("{0}.{1}.{2}.{3}.png", report.Offset, report.HasFailed ? "Failed" : "Succeeded", report.MethodName, report.DriverName);
+                            var screenshotPath = Path.Combine(basePath, fileName);
+                            screenshot.Save(Path.Combine(basePath, fileName), ImageFormat.Png);
+
+                            //add it to a concatenated report.
+                        }
                     }
                 }
 

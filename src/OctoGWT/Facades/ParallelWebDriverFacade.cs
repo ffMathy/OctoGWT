@@ -11,6 +11,7 @@ using System.Reflection;
 using OctoGWT.Reports;
 using OctoGWT.Extensions;
 using OctoGWT.Interfaces;
+using System.IO;
 
 namespace OctoGWT.Facades
 {
@@ -145,16 +146,23 @@ namespace OctoGWT.Facades
                 finally
                 {
                     //take a screenshot if it's supported.
-                    var screenshot = (Screenshot)null;
+                    var bitmap = (Bitmap)null;
 
                     var screenshotDriver = driver as ITakesScreenshot;
                     if (screenshotDriver != null)
                     {
-                        screenshot = screenshotDriver.GetScreenshot();
+                        var screenshot = screenshotDriver.GetScreenshot();
+                        if (screenshot != null)
+                        {
+                            using (var stream = new MemoryStream(screenshot.AsByteArray))
+                            {
+                                bitmap = new Bitmap(stream);
+                            }
+                        }
                     }
 
                     //generate a step report and add it.
-                    var report = new WebDriverStepReport(stepOffset, category, methodName, driverName, screenshot, exception);
+                    var report = new WebDriverStepReport(stepOffset, category, methodName, driverName, bitmap, exception);
                     lock (stepReports)
                     {
                         stepReports.Add(report);
@@ -170,7 +178,7 @@ namespace OctoGWT.Facades
 
         private int GetClauseOrder(string clauseName)
         {
-            switch(clauseName)
+            switch (clauseName)
             {
                 case "Given":
                     return 1;

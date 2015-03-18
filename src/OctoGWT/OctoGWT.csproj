@@ -53,6 +53,7 @@
     <Compile Include="Exceptions\GivenException.cs" />
     <Compile Include="Exceptions\ThenException.cs" />
     <Compile Include="Exceptions\WhenException.cs" />
+    <Compile Include="Extensions\ScreenshotExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Facades\ThenWebDriverFacade.cs" />
     <Compile Include="Facades\WhenWebDriverFacade.cs" />
@@ -66,7 +67,7 @@
     <Compile Include="ContextChains\ThenContextChain.cs" />
     <Compile Include="Facades\ParallelWebDriverFacade.cs" />
     <Compile Include="ContextChains\WhenContextChain.cs" />
-    <Compile Include="Reports\ParallelWebDriverStepReport.cs" />
+    <Compile Include="Reports\WebDriverStepReport.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
