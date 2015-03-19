@@ -1,20 +1,24 @@
-﻿using OctoGWT.Exceptions;
-using OpenQA.Selenium;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading;
-
+using OctoGWT.Exceptions;
 using OctoGWT.Interfaces;
+using OpenQA.Selenium;
 
 namespace OctoGWT.Facades
 {
-    public sealed class WhenWebDriverFacade
+    public sealed class GivenWhenWebDriverFacade
     {
         private readonly ParallelWebDriverFacade driver;
 
-        internal WhenWebDriverFacade(ParallelWebDriverFacade driver)
+        internal GivenWhenWebDriverFacade(ParallelWebDriverFacade driver)
         {
             this.driver = driver;
+        }
+
+        public void Include(IGivenInstruction instruction)
+        {
+            instruction.Run(this);
         }
 
         public void Include(IWhenInstruction instruction)
@@ -42,11 +46,11 @@ namespace OctoGWT.Facades
 
             driver.WaitForElements(by, (elements) =>
             {
-                if(elements.Count() > 1)
+                if (elements.Count() > 1)
                 {
                     throw new WhenException("Tried finding an element to type in, but found multiple elements with the selector [" + by + "].");
                 }
-                
+
                 var firstElement = elements.First();
                 if (simulateNaturalTyping)
                 {
@@ -65,7 +69,8 @@ namespace OctoGWT.Facades
 
                         Thread.Sleep(randomDelay);
                     }
-                } else
+                }
+                else
                 {
                     firstElement.SendKeys(text);
                 }
@@ -96,6 +101,32 @@ namespace OctoGWT.Facades
                 }
             });
         }
-        
+
+        public void IAmOnPage(string url)
+        {
+            driver.NavigateToPage(url);
+        }
+
+        public void ICanSeeAnElement(By by)
+        {
+            driver.WaitForElements(by, (elements) =>
+            {
+                if(elements.Count() != 1)
+                {
+                    throw new GivenException("Expected a single element, but received several elements with the selector [" + by + "].");
+                }
+            });
+        }
+
+        public void ICanSeeMultipleElements(By by)
+        {
+            driver.WaitForElements(by, (elements) =>
+            {
+                if (elements.Count() == 1)
+                {
+                    throw new GivenException("Expected multiple elements, but received a single element with the selector [" + by + "].");
+                }
+            });
+        }
     }
 }

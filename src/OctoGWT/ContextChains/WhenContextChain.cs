@@ -1,20 +1,17 @@
-﻿using OctoGWT.Facades;
+﻿using System;
+using OctoGWT.Facades;
 using OctoGWT.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OctoGWT.ContextChains
 {
-    public sealed class WhenContextChain : ContextChainBase<GivenContextChain, IWhenInstruction, WhenWebDriverFacade>
+    public sealed class WhenContextChain : ContextChainBase<GivenContextChain, IWhenInstruction, GivenWhenWebDriverFacade>
     {
         internal WhenContextChain(GivenContextChain parentChain, params IWhenInstruction[] instructions) : base(parentChain, instructions)
         {
         }
 
-        internal WhenContextChain(GivenContextChain parentChain, params Action<WhenWebDriverFacade>[] actions) : base(parentChain, actions)
+        internal WhenContextChain(GivenContextChain parentChain, params Action<GivenWhenWebDriverFacade>[] actions)
+            : base(parentChain, actions)
         {
         }
 
@@ -30,9 +27,9 @@ namespace OctoGWT.ContextChains
             return context;
         }
 
-        internal override WhenWebDriverFacade ConstructNewFacade(ParallelWebDriverFacade browser)
+        internal override GivenWhenWebDriverFacade ConstructNewFacade(ParallelWebDriverFacade browser)
         {
-            return new WhenWebDriverFacade(browser);
+            return new GivenWhenWebDriverFacade(browser);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace OctoGWT.Interfaces
 {
-    public interface IGivenInstruction : IInstruction<GivenWebDriverFacade>
+    public interface IGivenInstruction : IInstruction<GivenWhenWebDriverFacade>
     {
     }
 }

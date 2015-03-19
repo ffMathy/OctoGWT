@@ -11,7 +11,7 @@ namespace OctoGWT.Tests.Instructions
 {
     sealed class GivenIAmOnGooglesFrontPage : IGivenInstruction
     {
-        public void Run(GivenWebDriverFacade g)
+        public void Run(GivenWhenWebDriverFacade g)
         {
             g.IAmOnPage("https://www.google.com");
             g.ICanSeeAnElement(By.XPath("//input[@name='q']"));

@@ -2,7 +2,7 @@
 
 namespace OctoGWT.Interfaces
 {
-    public interface IWhenInstruction : IInstruction<WhenWebDriverFacade>
+    public interface IWhenInstruction : IInstruction<GivenWhenWebDriverFacade>
     {
     }
 }

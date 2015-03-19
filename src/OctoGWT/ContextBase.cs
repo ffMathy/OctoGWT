@@ -178,7 +178,7 @@ namespace OctoGWT.Facades
             });
         }
 
-        public GivenContextChain Given(params Action<GivenWebDriverFacade>[] actions)
+        public GivenContextChain Given(params Action<GivenWhenWebDriverFacade>[] actions)
         {
             var context = new GivenContextChain(this, actions);
             return context;
