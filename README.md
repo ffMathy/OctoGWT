@@ -61,7 +61,7 @@ You can see all of the classes below.
 ```csharp
 sealed class GivenIAmOnGooglesFrontPage : IGivenInstruction
 {
-    public void Run(GivenWebDriverFacade g)
+    public void Run(GivenWhenWebDriverFacade g)
     {
         g.IAmOnPage("https://www.google.com");
         g.ICanSeeAnElement(By.XPath("//input[@name='q']"));
@@ -79,7 +79,7 @@ sealed class WhenISearchOnGoogleFor : IWhenInstruction
         this.term = term;
     }
 
-    public void Run(WhenWebDriverFacade w)
+    public void Run(GivenWhenWebDriverFacade w)
     {
         //type in the term to the search field.
         w.ITypeInAnElement(By.XPath("//input[@name='q']"), term);
